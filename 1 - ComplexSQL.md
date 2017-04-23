@@ -73,6 +73,7 @@ ON P.DEPTNO = D.DEPTNO
 ```
 
 **Result:**
+
 | ProjNo | ProjName | P.DeptNo | D.DeptNo | DeptName |
 |--------|----------|----------|----------|----------|
 | AD3100 | Admin Services | D01 | D01 | Development Center |
@@ -126,6 +127,7 @@ ON P.DEPTNO = D.DEPTNO
 
 #### Result:
 **Notice the third tuple in this result**
+
 | ProjNo | ProjName | P.DeptNo | D.DeptNo | DeptName |
 |--------|----------|----------|----------|----------|
 | AD3100 | Admin Services | D01 | D01 | Development Center |
