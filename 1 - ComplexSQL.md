@@ -272,5 +272,175 @@ FROM EMPLOYEE, DEPARTMENT
 WHERE Dno=Dnumber AND Dname='Research';
 ```
 
-# Grouping
+# Grouping: GROUP BY and Having Clauses
 
+- **Partition** relation into subsets of tuples
+  * Based on **grouping attribute(s)**
+  * Apply function to each such group independently
+- **GROUP BY** clause
+  * Specifies grouping attributes
+- If NULLs exist in grouping attribute
+  * Separate group created for all tuples with a NULL value in grouping attribute
+- **HAVING** clause
+  * Provides a condition on the summary information
+
+#### Example:
+
+*Q28: For each department that has more than five employees, retrieve the department number and the number of its employees who are making more the $40,000.*
+```sql
+SELECT Dnumber, COUNT(*)
+FROM DEPARTMENT, EMPLOYEE
+WHERE Dnumber=Dno AND SALARY>40000 AND
+      (SELECT Dno
+       FROM EMPLOYEE
+       GROUP BY Dno
+       HAVING COUNT(*) > 5);
+```
+
+
+# SQL Query Format Summary
+
+```sql
+SELECT <attribute function list>
+FROM <table list>
+WHERE <condition>
+GROUP BY <grouping attribute(s)>
+HAVING <group condition>
+ORDER BY <attribute list>;
+```
+
+
+# Constraints as Assertions
+
+- **CREATE ASSERTION**
+  * Specify additional types of constraints outside scope of built-in relational model constraints
+
+## Specifying General Constraints as Assertions
+
+- *CREATE ASSERTION*
+  * Specify a query that selects any tuples that violate the desired condition
+  * Use only in cases where its not possible to use *CHECK* on attributes and domains
+
+### Example
+
+*This creates and assertion where it checks if there does not exist an employee who's salary is greater than a managers salary*
+```sql
+#THIS WILL NOT WORK IN MYSQL, Maria DB has a CREATE ASSERTIONS function
+CREATE ASSERTION SALARY_CONSTRAINT
+CHECK (NOT EXISTS (SELECT *
+                   FROM EMPLOYEE E, EMPLOYEE M,
+                        DEPARTMENT D
+                   WHERE E.Salary>M.Salary
+                         AND E.Dno=D.Dnumber
+                         AND D.Mgr_ssn=M.Ssn));
+```
+
+# Actions as Triggers
+
+- **CREATE TRIGGER**
+  * Specify automatic actions that database system will perform when certain events occur
+
+## Triggers in SQL
+
+- *CREATE TRIGGER* statement
+  * Used to maintain database consistency, monitor database updates, auto-update derived data
+- Triggers Consist of three parts:
+  * **Event(s)**
+  * **Condition**
+  * **Action**
+
+### Example
+
+```sql
+CREATE TRIGGER SALARY_VIOLATION
+  BEFORE INSERT OR UPDATE OF SALARY, SUPERVISOR_SSN
+    ON EMPLOYEE
+FOR EACH ROW
+  WHEN(NEW.SALARY > (SELECT SALARY FROM EMPLOYEE
+                     WHERE SSN=NEW.SUPERVISOR_SSN))
+                     INFORM_SUPERVISOR(NEW.Supervisor_ssn, NEW.Ssn);
+```
+
+# Views (Virtual Tables) in SQL
+
+- Concept of a view in SQL
+  * Single table derived from other tables
+  * Considered to be a virtual table
+
+## Specification of Views in SQL
+
+- **CREATE VIEW** command
+  * Give table name, list of attribute names, and a query to specify the contents of the view
+
+### Example
+
+*V1:Creates a view in which retrieves all employee's first names, last names, the project names in which they are working on, and the amount of hours they have worked on that project*
+
+```sql
+CREATE VIEW WORKS_ON1
+AS SELECT E.Fname, E.Lname, P.Pname, W.Hours
+   FROM EMPLOYEE E, PROJECT P, WORKS_ON W
+   WHERE E.Ssn=W.Essn AND W.Pno=P.Pnumber;
+```
+
+
+*V2:It creates a view where for each department, it retrieves the departments name, the number of employees it has, and the sum of the salary's each employee has in each department.*
+
+```sql
+CREATE VIEW DEPT_INFO(Dept_name, No_of_emps, Total_sal)
+AS SELECT D.Dname, COUNT(*), SUM(Salary)
+   FROM DEPARTMENT D, EMPLOYEE E
+   WHERE D.Dnumber=E.Dno
+   GROUP BY Dname;
+```
+
+## Specifications of a View in SQL
+
+- Specify the queries on a view
+- View will always up-to-date
+  * Responsibility of the DBMS and not the user
+- **DROP VIEW** command
+  * Dispose of a view
+
+
+## View Implementation
+
+- Complex problem of efficiently implementing a view for querying
+- **Query Modification** approach
+  * Modify view query into a query on underlying base tables
+  * Disadvantage: inefficient for views defined via complex queries that are time-consuming to execute
+- **View Materialization Approach**
+  * Physically create a temporary view table when the view is first queried
+  * Keep that table on the assumption that other queries on the view will follow
+  * Requires efficient strategy for automatically updating the view table when the base tables are updated
+- **Incremental Update Strategies**
+  *DBMS determines what new tuples must be inserted, deleted, or modified in a materialized view table
+
+# Schema Change Statements
+
+- Can be done while the database is operational
+- Does not require recompilation of the database schema
+
+## DROP Command
+
+- DROP command
+  * Used to drop named schema elements, such as tables, domains, or constraint
+- Drop behavior options:
+  * `CASCADE` and `RESTRICT`
+- **Example:** `DROP SCHEMA COMPANY CASCADE;`
+
+## ALTER Command
+
+- **Alter table** actions include:
+  * Adding or dropping a column (attribute)
+  * Changing a column definition
+  * Adding or dropping table constraints
+- **Example:** `ALTER TABLE COMPANY.EMPLOYEE ADD COLUMN Job VARCHAR(12);`
+- To drop a column
+  * Choose either `CASCADE` or `RESTRICT`
+- To change constraints specified on a table
+  * Add or drop a named constraint
+  ```sql
+  ALTER TABLE Company.Employee
+  DROP CONSTRAINT EMPSUPERFK CASCADE;
+  ```
