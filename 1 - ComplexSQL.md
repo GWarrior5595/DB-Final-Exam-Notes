@@ -1,3 +1,5 @@
+Complex SQL (March 20th - 22nd)
+
 # Comparisons Involving NULL and Three-Valued Logic
 
 - Meanings of NULL
