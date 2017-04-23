@@ -12,9 +12,7 @@ Complex SQL (March 20th - 22nd)
 - Each individual NULL value is considered to be different from every other NULL value
 - SQL uses a three-valued logic:
   * `TRUE`, `FALSE`, and `UNKNOWN`
-
-(INSERT PHOTO HERE OF COMPARISON CHART)
-
+  
 - SQL allows queries that check whether an attribute value is NULL
   * `IS` or `IS NOT NULL`
 
@@ -384,7 +382,13 @@ ON P.DeptNo=D.DeptNo
 
 ## Cross Join (Cartesian Product)
 
-- TO FILL OUT
+- `CROSS JOIN`
+  * To Retrieve a list of names of each female employee's dependents
+  * EMP_DEPENDENTS = EMPNAMES X Depenent
+
+```sql
+SELECT * FROM EMPNAME CROSS JOIN DEPENDENT
+```
 
 
 ## Nested Joins
