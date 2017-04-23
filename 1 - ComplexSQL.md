@@ -1,3 +1,164 @@
+# Comparisons Involving NULL and Three-Valued Logic
+
+- Meanings of NULL
+  * **Unknown value**
+    * Date of Birth is Unknown
+  * **Unavailable or withheld value**
+    * Home phone number does not want it listed
+  * **Not applicable attribute**
+    * Attribute LastCollegeDegree is NULL for someone without a college degree
+- Each individual NULL value is considered to be different from every other NULL value
+- SQL uses a three-valued logic:
+  * `TRUE`, `FALSE`, and `UNKNOWN`
+
+(INSERT PHOTO HERE OF COMPARISON CHART)
+
+- SQL allows queries that check whether an attribute value is NULL
+  * `IS` or `IS NOT NULL`
+
+### Example
+
+*Q18: Retrieve the names of all employees who do not have supervisors*
+
+```sql
+SELECT Fname, Lname
+FROM EMPLOYEE
+WHERE Super_ssn IS NULL;
+```
+
+# Complex SQL Retrieval Queries
+
+- Additional features allow users to specify more complex retrievals from the database:
+  * Nested Queries
+  * Joined Tables
+  * Outer Joins
+  * Aggregate functions
+  * Grouping
+
+
+# Nested Queries
+
+- **Nested queries**
+  * Complete select-from-where blocks within `WHERE` clause of another query
+  * Also known as an **Outer query**
+- Comparison operator `IN`
+  * Compares value *v* with a set(or multiset) of values *V*
+  * Evaluates `TRUE` if *v* is one of the elements in *V*
+
+### Example
+
+*Explanation: Gets all the project numbers in which are under the department managed by an employee with the last name of Smith or the project number in which employees with the last name Smith are working on.*
+```sql
+SELECT DISTINCT Pnumber
+FROM PROJECT
+WHERE Pnumber IN
+      (SELECT Pnumber
+       FROM PROJECT, DEPARTMENT, EMPLOYEE
+       WHERE Dnum=Dnumber AND Mgr_ssn=Ssn
+       AND Lname='Smith')
+OR
+Pnumber IN 
+(
+  SELECT Pno
+  FROM WORKS_ON,EMPLOYEE
+  WHERE Essn=Ssn AND Lname='Smith');
+);
+```
+
+- You can use tuple values in parentheses along with Nested Queries
+
+### Example
+
+*Explanation: If there is a tuple that has the SSN of the employee within the WORKS_ON table it will retrieve an SSN of 123456789*
+```sql
+SELECT DISTINCT Essn
+FROM WORKS_ON
+WHERE (Pno,Hours) IN (SELECT Pno,Hours
+                      FROM WORKS_ON
+                      WHERE Essn='123456789');
+```
+
+## Other Comparison Operators
+
+- Other Comparison Operators to compare a single value v
+  * `ANY` (or = `SOME`) operator
+    *  Returns `TRUE` if the value *v* is equal to some value in set *V*, hence it is equivalent to `IN`
+  * Other operators can be combined with `ANY`(or `SOME`): `>`(Greater Than), `>=`(Greater than or equal), `<`(Less Than), `<=`(Less than or equal), and `<>`(not equal)
+  * The Keyword `ALL` can be combined with these operators
+      * `ALL` returns `TRUE` if `ALL` of the sub-query values meet this condition
+
+### Example
+
+*Explanation: Selects the Employees who's salary is greater than the salaries of the employees in Department 5*
+
+```sql
+SELECT Lname, Fname
+FROM EMPLOYEE
+WHERE Salary > ALL (SELECT SALARY FROM EMPLOYEE WHERE Dno=5)
+```
+
+## Creating Tuple Variables
+
+- To avoid potential errors and ambiguities
+  * Create tuple variables (aliases) for all tables referenced in SQL query
+
+### Example
+
+```sql
+SELECT E.Fname, E.Lname
+FROM EMPLOYEE AS E
+WHERE E.Ssn IN (SELECT Essn
+                FROM Dependent AS D
+                WHERE E.Fname = D.Dependent_name AND E.Sex=D.Sex);
+```
+
+## Correlated Nested Queries
+
+- Two queries are said to be correlated
+    *  Whenever a condition in the WHERE clause of a nested query references some attribute of a relation declared in the outer query
+    * Evaluated once for each tuple in the outer query
+    * Like in the example about with tuple variables: For each EMPLOYEE tuple, evaluate the nested query; If the SSN value of the EMPLOYEE tuple is in the result of the nested query, then SELECT that EMPLOYEE tuple
+
+
+## EXISTS Function in SQL
+
+- `EXISTS` function
+    * Check whether the result of a correlated nested query is empty or not
+
+## NOT EXISTS Function in SQL
+
+- `NOT EXISTS`
+    * Typically used in conjunction with any correlated nested query
+
+## UNIQUE Function in SQL
+
+- SQL function `UNIQUE(Q)`
+    * Returns `TRUE` if there are no duplicate tuples in the result of query *Q*
+    * Use it to test whether the result of a nested query is a set or a multi-set
+
+
+## Explicit Sets & Renaming of Attributes
+
+- Can use explicit set of values in `WHERE` clause instead of a nested query
+
+```sql
+SELECT DISTINCT Essn
+FROM WORKS_ON
+WHERE Pno IN (1,2,3)
+```
+
+- Use quantifier `AS` followed by the desired new name
+    * Rename any attribute that appears in the result of a query
+
+### Example
+
+```sql
+SELECT E.Lname AS Employee_name, S.Lname AS Supervisor_name
+FROM EMPLOYEE AS E, EMPLOYEE AS S
+WHERE E.Super_ssn=S.Ssn
+```
+
+
 # Joined Tables in SQL
 
 ## Joined Table
