@@ -239,3 +239,38 @@ WHERE Plocation = 'Stafford';
 
 
 # Aggregate Functions in SQL
+
+- Used to summerize information from multiple tuples into a single-tuple summary
+- **Grouping**
+  * Create subgroups of tuples before summarizing
+- Built in Aggregate Functions
+  * **Count**, **SUM**, **MAX**, **MIN**, and **AVG**
+- Functions can be used in the *SELECT* clause  or in a *HAVING* clause
+- NULL values are discarded when aggregate function are applied
+- **Examples:**
+
+*Q20: Gets the sum, max, min, and average salary for employees in the research department*
+
+```sql
+SELECT SUM(Salary), MAX(Salary), MIN(Salary), AVG(Salary)
+FROM (EMPLOYEE JOIN DEPARTMENT ON Dno=Dnumber)
+WHERE Dname='Research';
+```
+
+*Q21: Gets the amount of employees in total*
+
+```sql
+SELECT COUNT(*)
+FROM EMPLOYEE;
+```
+
+*Q22: Same as Q20 except it gets the total number of employees in the research department*
+
+```sql
+SELECT COUNT(*)
+FROM EMPLOYEE, DEPARTMENT
+WHERE Dno=Dnumber AND Dname='Research';
+```
+
+# Grouping
+
