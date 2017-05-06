@@ -81,6 +81,23 @@ Example:
 
 # Second Normal Form
 
+  - **Full functional dependency**
+    * For a FD, `X->Y` - if removal of any attribute *A* from *X* makes the FD not hold anymore
+    * {Ssn, Pnumber} -> Hours
+  - **Partial dependency**
+    * {Ssn, Pnumber} -> Ename
+  - **Prime Attribute**
+    * Part of any canidate key will be considered as prime
+  - **Definition**: A relation schema *R* is in **second normal form (2NF)** if every non prime attribute *A* in *R* is not partially dependent on *any* key of *R*.<sup>11</sup>
+  - <image src="./images/Slide 27.PNG" width=450/>
+  - Test for 2NF: Check FDs whose left-hand side attributes are part of the primary key
+    * If the primary key contains a single attribute, no test needed
+  - <image src="./images/Slide 29.PNG" width=450/>
+  - Example of 2NF Normalization: 
+    * <image src="./images/Slide 30.PNG" width=450/>
+  - Another Example:
+    * <image src="./images/Slide 31.PNG" width=450/>
+    
 # Third Normal Form
 
 # Boyce-Codd Normal Form
