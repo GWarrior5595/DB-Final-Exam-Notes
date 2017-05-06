@@ -59,7 +59,7 @@
 ## Techniques to achieve 1NF
 
   - Remove attributes that violate 1NF and place in separate relation
-  - <image src="./images/Slide 21.PNG" width=400
+  - <image src="./images/Slide 21.PNG" width=400>
   - Expand the key
     * Introduces redundancy
     * <image src="./images/Slide 22.PNG" width=400></image>
