@@ -117,7 +117,7 @@
     * `X -> Y` in R does not mean `Y->X` in R
  ------------------------------------------------------------------
 
- (INSERT FUNCTIONAL DEPENDENCY IMAGE HERE Slide 8 of April 3rd)
+<image src="./images/SLIDE8.PNG"></image>
  
  ------------------------------------------------------------------
 
@@ -128,5 +128,6 @@
 
 -------------------------------------------------------------------
 
-![alt text](https://github.com/Toltar/DB-Final-Exam-Notes/blob/master/images/Slide_10_April3rd.PNG)
+<image src="./images/Slide10.PNG"></image>
+
 
