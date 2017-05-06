@@ -128,5 +128,5 @@
 
 -------------------------------------------------------------------
 
-(INSERT IMAGE FROM SLIDE 10 of April 3rd)
+![alt text](https://github.com/Toltar/DB-Final-Exam-Notes/blob/master/images/Slide_10_April3rd.PNG)
 
