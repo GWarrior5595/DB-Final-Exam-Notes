@@ -117,7 +117,7 @@
     * `X -> Y` in R does not mean `Y->X` in R
  ------------------------------------------------------------------
 
-<image src="./images/SLIDE8.PNG"></image>
+<image width="300px" src="./images/SLIDE8.PNG"></image>
  
  ------------------------------------------------------------------
 
@@ -128,6 +128,6 @@
 
 -------------------------------------------------------------------
 
-<image src="./images/Slide10.PNG"></image>
+<image width="300px" src="./images/Slide10.PNG"></image>
 
 
